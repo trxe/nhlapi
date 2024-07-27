@@ -31,7 +31,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - uses: docker://pandoc/latex:2.9
+      - name: Check prior contents
+        run: ls -al
+      - uses: docker://pandoc/core:2.9
         with:
           args: --css=styling.css 
             -V lang=en 
@@ -39,6 +41,8 @@ jobs:
             -t markdown-smart
             --to=html5
             --output=index.html ${{ steps.files_list.outputs.files }}
+      - name: Check current contents
+        run: ls -al
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
