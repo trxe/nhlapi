@@ -39,8 +39,9 @@ jobs:
             -V lang=en 
             --mathjax 
             -t markdown-smart
-            --to=html5
-            --output=index.html ${{ steps.files_list.outputs.files }}
+            --to=html5 
+            README.md
+            --output=index.html 
       - name: Check current contents
         run: ls -al
       - name: Setup Pages
