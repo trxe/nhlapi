@@ -6,7 +6,13 @@ jobs:
   convert_via_pandoc:
     runs-on: ubuntu-22.04
     steps:
-      - uses: docker://pandoc/core:2.9
+      - uses: actions/checkout@v3
+      - name: create file list
+        id: files_list
+        run: |
+          mkdir output  # create output dir
+          echo "files=$(printf '"%s" ' *.md)" > $GITHUB_OUTPUT
+      - uses: docker://pandoc/latex:2.9
         with:
           args: --css=styling.css 
             -V lang=en 
@@ -14,5 +20,8 @@ jobs:
             --mathjax 
             -t markdown-smart
             --to=html5
-            README.md
-            -o index.html
+            --output=output/result.pdf ${{ steps.files_list.outputs.files }}
+      - uses: actions/upload-artifact@v3
+        with:
+          name: output
+          path: output
