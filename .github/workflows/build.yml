@@ -20,7 +20,7 @@ jobs:
             --mathjax 
             -t markdown-smart
             --to=html5
-            --output=output/result.pdf ${{ steps.files_list.outputs.files }}
+            --output=output/result.html ${{ steps.files_list.outputs.files }}
       - uses: actions/upload-artifact@v3
         with:
           name: output
