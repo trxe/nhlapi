@@ -1,9 +1,10 @@
-name: Deploy to github-pages
+# Simple workflow for deploying static content to GitHub Pages
+name: Deploy static content to Pages
 
 on:
   # Runs on pushes targeting the default branch
   push:
-    branches: ["main", "add-workflow"]
+    branches: ["main"]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -21,32 +22,13 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  convert_via_pandoc:
+  # Single deploy job since we're just deploying
+  deploy:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: create file list
-        id: files_list
-        run: |
-          mkdir output  # create output dir
-          echo "files=$(printf '"%s" ' *.md)" > $GITHUB_OUTPUT
-      - uses: docker://pandoc/latex:2.9
-        with:
-          args: --css=styling.css 
-            -V lang=en 
-            -V highlighting-css= 
-            --mathjax 
-            -t markdown-smart
-            --to=html5
-            --output=output/result.html ${{ steps.files_list.outputs.files }}
-      - uses: actions/upload-artifact@v3
-        with:
-          name: output
-          path: output
-      # Simple workflow for deploying static content to GitHub Pages
       - name: Checkout
         uses: actions/checkout@v4
       - name: Setup Pages
@@ -55,7 +37,7 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           # Upload entire repository
-          path: './output'
+          path: '.'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
