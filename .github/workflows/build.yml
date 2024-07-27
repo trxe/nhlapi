@@ -35,7 +35,7 @@ jobs:
         run: ls -al
       - uses: docker://pandoc/core:2.9
         with:
-          args: --css=styling.css 
+          args: --standalone --css=styling.css 
             -V lang=en 
             --mathjax 
             -t markdown-smart

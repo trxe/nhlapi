@@ -1,4 +1,4 @@
 #/bin/bash
 
-pandoc --css=styling.css -V lang=en -V highlighting-css= --mathjax \
+pandoc --standalone --css=styling.css -V lang=en -V highlighting-css= --mathjax \
        -t markdown-smart --to=html5 README.md -o index.html
