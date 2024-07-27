@@ -13,6 +13,15 @@ layout: page
 All endpoints described in this section are relative to the following base URL:
 `https://api.nhle.com/stats/rest/`
 
+## Common Parameters
+
+- `lang`: Language. Use `en` unless otherwise necessary
+
+## Common Query Parameters
+
+### 
+
+
 ## Players
 
 **Endpoint**: `/{lang}/players`
