@@ -8,7 +8,7 @@ output:
 layout: page
 ---
 
-# NHL Stats API (WIP)
+# NHL Stats API
 
 All endpoints described in this section are relative to the following base URL:
 `https://api.nhle.com/stats/rest/`
