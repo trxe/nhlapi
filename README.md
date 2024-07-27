@@ -153,6 +153,7 @@ All endpoints described in this section are relative to the following base URL:
 
 *parameters*:
 `{module-type}`: One of the following
+
 - Home
 - Footer
 - RecordsIndividual
@@ -263,6 +264,7 @@ curl -X GET "https://api.nhle.com/stats/rest/en/players?cayenneExp=sweaterNumber
 *parameters*:
 
 `report`:
+
 - summary
 - realtime
 - penalties
@@ -1214,6 +1216,7 @@ curl +X GET "https://api.nhle.com/stats/rest/en/skater/faceoffwins?limit=1&cayen
 **Endpoint**: `/{lang}/goalie/{report}`
 
 `report`:
+
 - summary
 - shootout
 - advanced
@@ -1240,6 +1243,7 @@ curl +X GET "https://api.nhle.com/stats/rest/en/skater/faceoffwins?limit=1&cayen
 **Endpoint**: `/{lang}/team`
 
 `report`:
+
 - summary
 - goalsagainstbystrength
 - realtime
