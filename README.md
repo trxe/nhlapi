@@ -4,6 +4,7 @@ title: Unofficial NHL API Docs
 
 # Unofficial NHL API Docs
 
+
 ## Shortcuts to essential information
 
 - All seasons
