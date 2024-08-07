@@ -49,14 +49,33 @@ jobs:
           find ./ -iname '*.md' -type f -exec sh -c 'echo ${0}; pandoc --standalone --css=styling.css -V lang=en --mathjax -t markdown-smart --to=html5 ${0} -o output/${0%.md}.html' {} \;
       - name: Setup Pages
         uses: actions/configure-pages@v5
+      - name: Archive artifact
+        shell: sh
+        run: |
+          echo ::group::Archive artifact
+          tar \
+            --directory output/ \
+            -cvf "$RUNNER_TEMP/artifact.tar" \
+            --exclude=.git \
+            --exclude=.github \
+            .
+          echo ::endgroup::
       # - name: Upload artifact
-      #   uses: actions/upload-pages-artifact@v3
+      #   uses: actions/upload-artifact@master
       #   with:
       #     path: './output'
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v1
+        id: upload-artifact
+        uses: actions/upload-artifact@v4
         with:
-          path: output
+          name: github-pages
+          path: ${{ runner.temp }}/artifact.tar
+          retention-days: 1
+          if-no-files-found: error
+      # - name: Upload artifact
+      #   uses: actions/upload-pages-artifact@v3
+      #   with:
+      #     path: output
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
