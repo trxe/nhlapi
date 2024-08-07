@@ -4,7 +4,7 @@ name: Deploy static content to Pages
 on:
   # Runs on pushes targeting the default branch
   push:
-    branches: ["main"]
+    branches: ["main", "add-workflow"]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -34,14 +34,17 @@ jobs:
       - name: Check prior contents
         run: ls -al
       - uses: docker://pandoc/core:2.9
-        with:
-          args: --standalone --css=styling.css 
-            -V lang=en 
-            --mathjax 
-            -t markdown-smart
-            --to=html5 
-            README.md
-            --output=index.html 
+        entrypoint: /bin/sh
+        args: -c 'mkdir output; find ./ -iname 'docs/*.md' -type f -exec sh -c 'pandoc --standalone --css=styling.css -V lang=en --mathjax -t markdown-smart --to=html5 ${0} -o output/${0%.md}.html' {}\;'
+        #  do pandoc  $d '
+        # with:
+        #   args: --standalone --css=styling.css 
+        #     -V lang=en 
+        #     --mathjax 
+        #     -t markdown-smart
+        #     --to=html5 
+        #     README.md
+        #     --output=index.html 
       - name: Check current contents
         run: ls -al
       - name: Setup Pages
@@ -50,7 +53,7 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           # Upload entire repository
-          path: '.'
+          path: './output'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
