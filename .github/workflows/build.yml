@@ -4,7 +4,7 @@ name: Deploy static content to Pages
 on:
   # Runs on pushes targeting the default branch
   push:
-    branches: ["main", "add-workflow"]
+    branches: ["main"]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -28,15 +28,17 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
+    container:
+      image: docker://pandoc/core:2.9
+      options: --entrypoint=sh
     steps:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Check prior contents
         run: ls -al
-      - uses: docker://pandoc/core:2.9
-        entrypoint: /bin/sh
-        args: -c 'mkdir output; find ./ -iname 'docs/*.md' -type f -exec sh -c 'pandoc --standalone --css=styling.css -V lang=en --mathjax -t markdown-smart --to=html5 ${0} -o output/${0%.md}.html' {}\;'
-        #  do pandoc  $d '
+      # - uses: docker://pandoc/core:2.9
+      #   entrypoint: /bin/sh
+      #   args: -c 'mkdir output; find ./ -iname 'docs/*.md' -type f -exec sh -c 'pandoc --standalone --css=styling.css -V lang=en --mathjax -t markdown-smart --to=html5 ${0} -o output/${0%.md}.html' {}\;'
         # with:
         #   args: --standalone --css=styling.css 
         #     -V lang=en 
@@ -45,15 +47,27 @@ jobs:
         #     --to=html5 
         #     README.md
         #     --output=index.html 
-      - name: Check current contents
-        run: ls -al
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+      - name: prepare output directories
+        run: |
+          for d in */; do
+            mkdir -p output/$d
+          done
+      - name: convert md to html
+        run: |
+          find ./ -iname 'docs/*.md' -type f -exec sh -c 'pandoc --standalone --css=styling.css -V lang=en --mathjax -t markdown-smart --to=html5 ${0} -o output/${0%.md}.html' {} \;
+      - uses: actions/upload-artifact@master
         with:
-          # Upload entire repository
-          path: './output'
+          name: output
+          path: output
+      # - name: Check current contents
+      #   run: ls -al
+      # - name: Setup Pages
+      #   uses: actions/configure-pages@v5
+      # - name: Upload artifact
+      #   uses: actions/upload-pages-artifact@v3
+      #   with:
+      #     # Upload entire repository
+      #     path: './output'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
