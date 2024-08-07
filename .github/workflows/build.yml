@@ -49,12 +49,12 @@ jobs:
         #     --output=index.html 
       - name: prepare output directories
         run: |
-          for d in */; do
+          for d in docs/*/; do
             mkdir -p output/$d
           done
       - name: convert md to html
         run: |
-          find ./ -iname 'docs/*.md' -type f -exec sh -c 'pandoc --standalone --css=styling.css -V lang=en --mathjax -t markdown-smart --to=html5 ${0} -o output/${0%.md}.html' {} \;
+          find ./ -iname 'docs/*.md' -type f -exec sh -c 'echo ${0}; pandoc --standalone --css=styling.css -V lang=en --mathjax -t markdown-smart --to=html5 ${0} -o output/${0%.md}.html' {} \;
       - uses: actions/upload-artifact@master
         with:
           name: output
