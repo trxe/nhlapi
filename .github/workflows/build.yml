@@ -55,7 +55,7 @@ jobs:
       #     path: './output'
       - uses: actions/upload-artifact@master
         with:
-          name: output
+          name: github-pages
           path: output
       - name: Deploy to GitHub Pages
         id: deployment
